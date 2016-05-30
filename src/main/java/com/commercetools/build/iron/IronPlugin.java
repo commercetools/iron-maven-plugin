@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean2;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -24,10 +26,12 @@ import java.util.concurrent.Future;
 @Mojo( name = "sayhi")
 public class IronPlugin extends AbstractMojo {
 
+    @Parameter
+    private String codeFile;
     //body settings
-    @Parameter(required = true, readonly = true)
+    @Parameter(property = "name", required = true, readonly = true)
     private String name;
-    @Parameter(required = true, readonly = true)
+    @Parameter(readonly = true, defaultValue = "iron/java")
     private String image;
     @Parameter
     private String command;
@@ -46,16 +50,19 @@ public class IronPlugin extends AbstractMojo {
     @Parameter
     private String envVars;
     //credentials
-    @Parameter(property = "iron.token", name = "iron.token", required = true, readonly = true)
+    @Parameter(property = "iron.token"/*, name = "iron.token"*/, /*required = true, */readonly = true)
     private String token;
-    @Parameter(property = "iron.projectId", name = "iron.projectId", required = true, readonly = true)
+    @Parameter(property = "iron.projectId"/*, name = "iron.projectId"*//*, required = true*/, readonly = true)
     private String projectId;
 
     public void execute() throws MojoExecutionException {
+        System.err.println(ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE));
+
         try(final AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient()) {
+            final File file = new File(codeFile);
             final Response response = asyncHttpClient.preparePost(getCodeUploadUrl())
-                    .addBodyPart(new StringPart("settings", getConfigPayloadString()))
-                    .addBodyPart(new FilePart("code", new File(".gitignore")))
+                    .addBodyPart(new StringPart("data", getConfigPayloadString()))
+                    .addBodyPart(new FilePart("file", file, "application/zip", null, file.getName()))
                     .execute().toCompletableFuture().join();
             System.err.println(response);
         } catch (Exception e) {
