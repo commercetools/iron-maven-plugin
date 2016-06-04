@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-@Mojo( name = "sayhi")
+@Mojo(name = "deploy")
 public class IronPlugin extends AbstractMojo {
 
-    @Parameter
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar")
     private String codeFile;
     //body settings
     @Parameter(property = "name", required = true, readonly = true)
@@ -43,6 +43,8 @@ public class IronPlugin extends AbstractMojo {
     private String stack;
     @Parameter
     private Integer retries;
+    @Parameter(defaultValue = "java")
+    private String runtime;
     @Parameter
     private Integer retriesDelay;
     @Parameter
@@ -56,21 +58,22 @@ public class IronPlugin extends AbstractMojo {
     private String projectId;
 
     public void execute() throws MojoExecutionException {
-        System.err.println(ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE));
-
         try(final AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient()) {
             final File file = new File(codeFile);
+            final String data = getConfigPayloadString();
             final Response response = asyncHttpClient.preparePost(getCodeUploadUrl())
-                    .addBodyPart(new StringPart("data", getConfigPayloadString()))
+                    .addBodyPart(new StringPart("data", data))
                     .addBodyPart(new FilePart("file", file, "application/zip", null, file.getName()))
                     .execute().toCompletableFuture().join();
-            System.err.println(response);
+            if (!response.hasResponseStatus() || response.getStatusCode() > 201) {
+                throw new RuntimeException("failed with " + response);
+            }
         } catch (Exception e) {
             throw new MojoExecutionException("failed", e);
         }
     }
 
-    private String getConfigPayloadString() throws IllegalAccessException, InvocationTargetException {
+    private String getConfigPayloadString() throws Exception {
         final CodesDraft codesDraft = new CodesDraft();
         BeanUtils.copyProperties(codesDraft, this);
         final Gson gson = new Gson();
@@ -78,11 +81,68 @@ public class IronPlugin extends AbstractMojo {
     }
 
     private String getCodeUploadUrl() {
-        final String format = "https://worker-aws-us-east-1.iron.io/2/projects/${projectID}/codes?oauth=${token}";
+        final String format = "https://worker-aws-us-east-1.iron.io/2/projects/${projectId}/codes?oauth=${token}";
         final Map<String, Object> values = new HashMap<>();
         values.put("projectId", projectId);
         values.put("token", token);
         final String replace = StrSubstitutor.replace(format, values);
         return replace;
+    }
+
+
+    public String getCodeFile() {
+        return codeFile;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public String getConfig() {
+        return config;
+    }
+
+    public String getDefaultPriority() {
+        return defaultPriority;
+    }
+
+    public String getEnvVars() {
+        return envVars;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getMaxConcurrency() {
+        return maxConcurrency;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public Integer getRetries() {
+        return retries;
+    }
+
+    public Integer getRetriesDelay() {
+        return retriesDelay;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public String getStack() {
+        return stack;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

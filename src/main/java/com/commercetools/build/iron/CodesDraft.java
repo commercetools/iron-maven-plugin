@@ -9,6 +9,7 @@ public class CodesDraft {
     private String config;
     @SerializedName("max_concurrency")
     private String maxConcurrency;
+    private String runtime;
     private String stack;
     private Integer retries;
     @SerializedName("retries_delay")
@@ -99,5 +100,13 @@ public class CodesDraft {
 
     public void setStack(final String stack) {
         this.stack = stack;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(final String runtime) {
+        this.runtime = runtime;
     }
 }

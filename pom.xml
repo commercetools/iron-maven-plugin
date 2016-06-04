@@ -4,7 +4,7 @@
 
     <groupId>com.commercetools.build.iron-maven-plugin</groupId>
     <artifactId>iron-maven-plugin</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <description>release artifacts to iron.io</description>
     <name>iron-maven-plugin</name>
