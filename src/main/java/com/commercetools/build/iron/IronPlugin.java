@@ -1,11 +1,7 @@
 package com.commercetools.build.iron;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean2;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -18,10 +14,8 @@ import org.asynchttpclient.request.body.multipart.FilePart;
 import org.asynchttpclient.request.body.multipart.StringPart;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 @Mojo(name = "deploy")
 public class IronPlugin extends AbstractMojo {
@@ -52,9 +46,9 @@ public class IronPlugin extends AbstractMojo {
     @Parameter
     private String envVars;
     //credentials
-    @Parameter(property = "iron.token"/*, name = "iron.token"*/, /*required = true, */readonly = true)
+    @Parameter(property = "iron.token", readonly = true)
     private String token;
-    @Parameter(property = "iron.projectId"/*, name = "iron.projectId"*//*, required = true*/, readonly = true)
+    @Parameter(property = "iron.projectId", readonly = true)
     private String projectId;
 
     public void execute() throws MojoExecutionException {
@@ -88,7 +82,6 @@ public class IronPlugin extends AbstractMojo {
         final String replace = StrSubstitutor.replace(format, values);
         return replace;
     }
-
 
     public String getCodeFile() {
         return codeFile;
