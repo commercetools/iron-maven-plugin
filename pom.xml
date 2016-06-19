@@ -4,7 +4,7 @@
 
     <groupId>com.commercetools.build.iron-maven-plugin</groupId>
     <artifactId>iron-maven-plugin</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <description>release artifacts to iron.io</description>
     <name>iron-maven-plugin</name>
@@ -26,7 +26,7 @@
         <developerConnection>scm:git:git@github.com:commercetools/iron-maven-plugin.git</developerConnection>
         <url>git@github.com:commercetools/iron-maven-plugin.git</url>
         <connection>scm:git:git@github.com:commercetools/iron-maven-plugin.git</connection>
-        <tag>v0.1.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
