@@ -22,14 +22,12 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-<!-- TODO
     <scm>
-        <developerConnection>scm:git:git@github.com:commercetools/commercetools-taglets.git</developerConnection>
-        <url>git@github.com:commercetools/commercetools-taglets.git</url>
-        <connection>scm:git:git@github.com:commercetools/commercetools-taglets.git</connection>
+        <developerConnection>scm:git:git@github.com:commercetools/iron-maven-plugin.git</developerConnection>
+        <url>git@github.com:commercetools/iron-maven-plugin.git</url>
+        <connection>scm:git:git@github.com:commercetools/iron-maven-plugin.git</connection>
         <tag>HEAD</tag>
     </scm>
--->
     <developers>
         <developer>
             <id>michael</id>
